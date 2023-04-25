@@ -2,7 +2,6 @@ import { Component } from 'react';
 import { GlobalStyle } from './GlobalStyle';
 import { Layout } from './Layout/Layout';
 import { ContactList } from './ContactList/ContactList';
-import { ContactForm } from './ContactForm/ContactForm';
 import { Filter } from './Filter/Filter';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -31,13 +30,13 @@ export class App extends Component {
   // стадія монтування
   componentDidMount() {
     const savedContacts = localStorage.getItem('contacts');
-     // Если сохранили в LS уже что-то, пишем ЭТО в state
+    // Если сохранили в LS уже что-то, пишем ЭТО в state
     if (savedContacts !== null) {
       const parsedContacts = JSON.parse(savedContacts);
       this.setState({ contacts: parsedContacts });
       return;
     }
-     // Если в LS ничего еще нет, пишем в state initialRecipes
+    // Если в LS ничего еще нет, пишем в state initialRecipes
     this.setState({ contacts: initialContacts });
   }
 
@@ -94,9 +93,6 @@ export class App extends Component {
 
     return (
       <Layout>
-        <h1>Phonebook</h1>
-        <ContactForm onSave={this.addContact} />
-
         <h2>Contacts</h2>
         <Filter value={this.state.filter} onSearch={this.changeFilter} />
         <ContactList items={visibleContacts} onDelete={this.deleteContact} />
