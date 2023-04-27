@@ -2,9 +2,8 @@ import { Component } from 'react';
 import { GlobalStyle } from './GlobalStyle';
 import { Layout } from './Layout/Layout';
 import { Searchbar } from './Searchbar/Searchbar';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { notificationMassege, notificationOptions } from 'components/Notification/Notification';
+import { ToastContainer } from 'react-toastify';
+import { ImageGallery } from './ImageGallery/ImageGallery';
 
 // render > didMount > getItem > setState > update > render > didUpdate > setItem
 
@@ -12,20 +11,23 @@ export class App extends Component {
   state = {
     textQuery: '',
   };
-
-  changeFilter = e => {
-    this.setState({ filter: e.currentTarget.value });
-    toast.error(`${notificationMassege}`, notificationOptions);
+  // записываем запрос поиска в App из Searchbar
+  handleSubmit = searchValue => {
+    this.setState({ textQuery: searchValue.query.trim().toLowerCase() });
+    // console.log(searchValue.query.trim().toLowerCase());
   };
 
   render() {
     return (
       <>
-        <Searchbar />
+        <Searchbar onSubmit={this.handleSubmit} />
+
         <Layout>
-          <ToastContainer />
-          <GlobalStyle />
+          <ImageGallery value={this.state.textQuery} />
         </Layout>
+
+        <ToastContainer />
+        <GlobalStyle />
       </>
     );
   }

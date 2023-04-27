@@ -1,4 +1,9 @@
 import styled from 'styled-components';
+import {
+  Form as FormikForm,
+  ErrorMessage as FormikErrorMessage,
+  Field,
+} from 'formik';
 
 export const SearchbarWrap = styled.header`
   top: 0;
@@ -9,6 +14,7 @@ export const SearchbarWrap = styled.header`
   justify-content: center;
   align-items: center;
   min-height: 64px;
+  margin-bottom: 16px;
   padding-right: 24px;
   padding-left: 24px;
   padding-top: 12px;
@@ -19,7 +25,7 @@ export const SearchbarWrap = styled.header`
     0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12);
 `;
 
-export const SearchForm = styled.form`
+export const Form = styled(FormikForm)`
   display: flex;
   align-items: center;
   width: 100%;
@@ -28,6 +34,16 @@ export const SearchForm = styled.form`
   border-radius: 3px;
   overflow: hidden;
 `;
+
+// export const SearchForm = styled.form`
+//   display: flex;
+//   align-items: center;
+//   width: 100%;
+//   max-width: 600px;
+//   background-color: #fff;
+//   border-radius: 3px;
+//   overflow: hidden;
+// `;
 
 export const SearchBtn = styled.button`
   display: inline-block;
@@ -43,7 +59,7 @@ export const SearchBtn = styled.button`
   }
 `;
 
-export const SearchInput = styled.input`
+export const FieldInput = styled(Field)`
   display: inline-block;
   width: 100%;
   font: inherit;
@@ -59,22 +75,32 @@ export const SearchInput = styled.input`
   }
 `;
 
-export const ListBtnDel = styled.button`
-  width: 30px;
-  padding: 3px;
-  border-radius: 5px;
-  border: none;
-  background-color: ${p => p.theme.colors.accentLight};
-  transition: all 0.2s ease-in-out;
-  :hover,
-  :focus {
-    background-color: ${p => p.theme.colors.accentDark};
-    color: #fff;
-    box-shadow: -2px -2px 5px #fff,
-      2px 2px 5px ${p => p.theme.colors.accentDark};
-    svg {
-      fill: #fff;
-      stroke: #fff;
-    }
-  }
+export const ErrorMessage = styled(FormikErrorMessage)`
+  position: absolute;
+  top: 120px;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: ${props => props.theme.colors.accentLight};
+  padding: 20px;
+
+  font-weight: 500;
+  font-size: 20px;
+  font-style: italic;
+  color: ${props => props.theme.colors.error};
 `;
+
+// export const SearchInput = styled.input`
+//   display: inline-block;
+//   width: 100%;
+//   font: inherit;
+//   font-size: 20px;
+//   border: none;
+//   outline: none;
+//   padding-left: 8px;
+//   padding-right: 8px;
+//   &::placeholder {
+//     font: inherit;
+//     font-size: 16px;
+//     font-style: italic;
+//   }
+// `;
