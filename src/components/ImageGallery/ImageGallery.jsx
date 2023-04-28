@@ -30,7 +30,7 @@ export class ImageGallery extends Component {
     // console.log(nextSearchValue);
     // якщо змінився запит скидаємо сторінки на початок
     if (prevSearchValue !== nextSearchValue) {
-      this.setState({ pageNumber: 1 });
+      this.setState({ pageNumber: 1, error: null });
     }
     console.log(pageNumber);
     // Перевіряємо, чи змінились пропси запиту або state сторінки (pageNumber)
@@ -44,13 +44,13 @@ export class ImageGallery extends Component {
       try {
         const response = await fetchData(nextSearchValue, pageNumber);
         console.log(pageNumber);
-        this.setState(prevState => ({
+        this.setState({
           images:
             pageNumber === 1
               ? response.data.hits
               : [...prevState.images, ...response.data.hits],
           totalPage: response.data.totalHits,
-        }));
+        });
       } catch (error) {
         this.setState({ error: 'Something wrong. Please try again.' });
       } finally {
