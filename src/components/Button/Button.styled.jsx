@@ -9,6 +9,7 @@ export const BtnLoadMore = styled.button`
   align-items: center;
   gap: 20px;
   padding: 8px;
+  margin-top: 10px;
   margin-left: auto;
   margin-right: auto;
   border-radius: 5px;

@@ -1,16 +1,12 @@
 import { Component } from 'react';
 import PropTypes from 'prop-types';
-import { GalleryList } from './ImageGallery.styled';
-// import { Loader } from './Loader/Loader';
-// import { Button } from './Button/Button';
+import { Alert, GalleryList } from './ImageGallery.styled';
 import { fetchData } from 'api/fetchData';
 import 'react-toastify/dist/ReactToastify.css';
-import {
-  notificationMassege,
-  notificationOptions,
-} from 'components/Notification/Notification';
-import { toast } from 'react-toastify';
 import { ImageGalleryItem } from 'components/ImageGalleryItem/ImageGalleryItem';
+import { Button } from 'components/Button/Button';
+import { Loader } from 'components/Loader/Loader';
+import { Modal } from 'components/Modal/Modal';
 
 export class ImageGallery extends Component {
   static propTypes = {
@@ -22,39 +18,98 @@ export class ImageGallery extends Component {
     pageNumber: 1,
     loading: false, // spiner
     showModal: false,
+    error: null,
+    totalPage: null,
   };
 
   async componentDidUpdate(prevProps, prevState) {
     const { pageNumber } = this.state;
-    const prevValue = prevProps.value;
-    const nextValue = this.props.value;
-    console.log(prevValue);
-    console.log(nextValue);
-
-    // Перевіряємо, чи змінились пропси запиту або сторінки.
+    const prevSearchValue = prevProps.value;
+    const nextSearchValue = this.props.value;
+    // console.log(prevSearchValue);
+    // console.log(nextSearchValue);
+    // якщо змінився запит скидаємо сторінки на початок
+    if (prevSearchValue !== nextSearchValue) {
+      this.setState({ pageNumber: 1 });
+    }
+    console.log(pageNumber);
+    // Перевіряємо, чи змінились пропси запиту або state сторінки (pageNumber)
     if (
-      prevValue !== nextValue ||
-      prevState.pageNumber !== this.state.pageNumber
+      prevSearchValue !== nextSearchValue ||
+      prevState.pageNumber !== pageNumber
     ) {
+      // запуск спінера
+      this.setState({ loading: true });
       // пішов запит на бекенд
       try {
-        const response = await fetchData(nextValue, pageNumber);
-        console.log(response.hits);
-        this.setState({ images: [...response.hits] });
-      } catch (error) {}
+        const response = await fetchData(nextSearchValue, pageNumber);
+        console.log(pageNumber);
+        this.setState(prevState => ({
+          images:
+            pageNumber === 1
+              ? response.data.hits
+              : [...prevState.images, ...response.data.hits],
+          totalPage: response.data.totalHits,
+        }));
+      } catch (error) {
+        this.setState({ error: 'Something wrong. Please try again.' });
+      } finally {
+        this.setState({ loading: false });
+      }
     }
-
-    toast.error(`${notificationMassege}`, notificationOptions);
   }
+
+  onLoadMore = () => {
+    this.setState(prevState => ({ pageNumber: prevState.pageNumber + 1 }));
+  };
+
+  onOpenModal = (imgUrl, tag) => {
+    this.setState({ showModal: true, imgUrl, tag });
+  };
+
+  onCloseModal = () => {
+    this.setState({ showModal: false });
+  };
+
   render() {
     return (
-      <GalleryList>
-        {this.state.images.map(img => (
-          <ImageGalleryItem key={img.id} item={img} />
-        ))}
-      </GalleryList>
-      // <Button />
-      // <Loader />
+      <>
+        <GalleryList>
+          {this.state.images.map(img => (
+            <ImageGalleryItem
+              key={img.id}
+              item={img}
+              openModal={this.onOpenModal}
+            />
+          ))}
+        </GalleryList>
+
+        {/* модалка */}
+        {this.state.showModal && (
+          <Modal closeModal={this.onCloseModal}>
+            <img src={this.state.imgUrl} alt={this.state.tag} />
+          </Modal>
+        )}
+
+        {/* спінер */}
+        <Loader isLoading={this.state.loading} />
+
+        {/* кнопка завантажити ще */}
+        {this.state.totalPage / 12 > this.state.pageNumber && (
+          <Button loadMore={this.onLoadMore} />
+        )}
+
+        {/* нічого не знайшло */}
+        {this.state.totalPage === 0 && (
+          <Alert>
+            'Sorry, there are no images matching your search query. Please try
+            again.'
+          </Alert>
+        )}
+
+        {/* помилка запиту */}
+        {this.state.error && <Alert>{this.state.error}</Alert>}
+      </>
     );
   }
 }

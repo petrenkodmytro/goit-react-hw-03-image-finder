@@ -1,9 +1,4 @@
 import styled from 'styled-components';
-import {
-  Form as FormikForm,
-  ErrorMessage as FormikErrorMessage,
-  Field,
-} from 'formik';
 
 export const SearchbarWrap = styled.header`
   top: 0;
@@ -25,7 +20,7 @@ export const SearchbarWrap = styled.header`
     0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12);
 `;
 
-export const Form = styled(FormikForm)`
+export const SearchForm = styled.form`
   display: flex;
   align-items: center;
   width: 100%;
@@ -35,31 +30,7 @@ export const Form = styled(FormikForm)`
   overflow: hidden;
 `;
 
-// export const SearchForm = styled.form`
-//   display: flex;
-//   align-items: center;
-//   width: 100%;
-//   max-width: 600px;
-//   background-color: #fff;
-//   border-radius: 3px;
-//   overflow: hidden;
-// `;
-
-export const SearchBtn = styled.button`
-  display: inline-block;
-  width: 48px;
-  height: 48px;
-  border: 0;
-  opacity: 0.6;
-  transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1);
-  outline: none;
-  :hover {
-    opacity: 1;
-    scale: 1.1;
-  }
-`;
-
-export const FieldInput = styled(Field)`
+export const SearchInput = styled.input`
   display: inline-block;
   width: 100%;
   font: inherit;
@@ -75,32 +46,22 @@ export const FieldInput = styled(Field)`
   }
 `;
 
-export const ErrorMessage = styled(FormikErrorMessage)`
-  position: absolute;
-  top: 120px;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: ${props => props.theme.colors.accentLight};
-  padding: 20px;
+export const SearchBtn = styled.button`
+  display: inline-block;
+  width: 48px;
+  height: 48px;
+  border: 0;
+  opacity: 0.6;
+  transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  outline: none;
 
-  font-weight: 500;
-  font-size: 20px;
-  font-style: italic;
-  color: ${props => props.theme.colors.error};
+  :hover {
+    opacity: 1;
+  }
+
+  :hover svg {
+    fill: ${props => props.theme.colors.accentDark};
+    transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
+    transform: scale(1.1);
+  }
 `;
-
-// export const SearchInput = styled.input`
-//   display: inline-block;
-//   width: 100%;
-//   font: inherit;
-//   font-size: 20px;
-//   border: none;
-//   outline: none;
-//   padding-left: 8px;
-//   padding-right: 8px;
-//   &::placeholder {
-//     font: inherit;
-//     font-size: 16px;
-//     font-style: italic;
-//   }
-// `;

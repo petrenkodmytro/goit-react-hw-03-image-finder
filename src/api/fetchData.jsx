@@ -14,11 +14,8 @@ export async function fetchData(query, pageNumber) {
       per_page: 12,
     },
   };
-  try {
-    const response = await axios.get(API_URL, options);
-    // console.log(response.data);
-    return response.data;
-  } catch (error) {
-    console.log(error);
-  }
+
+  const response = await axios.get(API_URL, options);
+  // console.log(response.data);
+  return response;
 }

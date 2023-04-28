@@ -12,3 +12,17 @@ export const GalleryList = styled.ul`
   margin-left: auto;
   margin-right: auto;
 `;
+
+export const Alert = styled.p`
+  position: absolute;
+  top: 140px;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: ${props => props.theme.colors.accentLight};
+  padding: 20px;
+  text-align: center;
+  font-weight: 500;
+  font-size: 20px;
+  font-style: italic;
+  color: ${props => props.theme.colors.error};
+`;

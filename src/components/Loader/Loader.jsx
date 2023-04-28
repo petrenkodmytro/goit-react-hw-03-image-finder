@@ -1,17 +1,17 @@
 import { Dna } from 'react-loader-spinner';
 
-export const Loader = () => {
+export const Loader = ({ isLoading }) => {
   return (
     <Dna
-      visible={true}
-      height="100"
-      width="100"
+      visible={isLoading}
+      height="80"
+      width="80"
       ariaLabel="dna-loading"
       wrapperStyle={{
-        position: 'absolute',
-        transform: 'translate(-50%, -50%)',
-        top: '50%',
-        left: '50%',
+        display: 'block',
+        marginTop: '5px',
+        marginLeft: 'auto',
+        marginRight: 'auto',
       }}
     />
   );
