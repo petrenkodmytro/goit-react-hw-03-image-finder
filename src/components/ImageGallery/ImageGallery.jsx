@@ -25,29 +25,36 @@ export class ImageGallery extends Component {
   };
 
   // якщо змінився запит скидаємо сторінки на початок
-  static getDerivedStateFromProps(nextProps, prevState) {
-    // Викликається перед render() під час монтування та перед усіма наступними викликами render, тобто після оновлення state або props
-    // Можна використовувати для того, щоб встановити state, залежно від props під час кожної їх зміни
-    // Повинен повернути об'єкт, яким буде оновлений стан, або null, якщо нічого оновлювати не потрібно
-    // Немає доступу до this
-    if (prevState.textQuery !== nextProps.value) {
-      // console.log(prevState); //стан
-      // console.log(nextProps); //пропси з Арр
-      return { pageNumber: 1, textQuery: nextProps.value };
-    }
-    return null;
-  }
+  // static getDerivedStateFromProps(nextProps, prevState) {
+  //   // Викликається перед render() під час монтування та перед усіма наступними викликами render, тобто після оновлення state або props
+  //   // Можна використовувати для того, щоб встановити state, залежно від props під час кожної їх зміни
+  //   // Повинен повернути об'єкт, яким буде оновлений стан, або null, якщо нічого оновлювати не потрібно
+  //   // Немає доступу до this
+  //   if (prevState.textQuery !== nextProps.value) {
+  //     // console.log(prevState); //стан
+  //     // console.log(nextProps); //пропси з Арр
+  //     return { pageNumber: 1, textQuery: nextProps.value };
+  //   }
+  //   return null;
+  // }
 
   async componentDidUpdate(prevProps, prevState) {
     //     Викликається відразу після оновлення компонента в DOM
     // Не викликається при початковому рендері компонента
     // Можна викликати setState(), обов'язково обгорнувши його в умову перевірки зміни попередніх і наступних props або state, щоб не виник нескінченний цикл ререндера (вкладка зависне або впаде).
     // Можна робити HTTP-запити
-    const { pageNumber } = this.state;
+    let { pageNumber } = this.state;
     const prevSearchValue = prevProps.value;
     const nextSearchValue = this.props.value;
-    // console.log(prevSearchValue);
-    // console.log(nextSearchValue);
+    // const page = this.props.pageNumber;
+
+    if (prevSearchValue !== nextSearchValue) {
+      // this.setState({ pageNumber: page });
+      pageNumber = 1;
+    }
+
+    // console.log('prevSearchValue', prevSearchValue);
+    // console.log('nextSearchValue', nextSearchValue);
 
     // Перевіряємо, чи змінились пропси запиту або state сторінки (pageNumber)
     if (

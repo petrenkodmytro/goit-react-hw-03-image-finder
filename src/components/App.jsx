@@ -7,7 +7,7 @@ import { ImageGallery } from './ImageGallery/ImageGallery';
 export class App extends Component {
   state = {
     textQuery: '',
-    pageNumber: 1,
+    // pageNumber: 1,
   };
 
   // записываем запрос поиска в App из Searchbar
@@ -23,7 +23,7 @@ export class App extends Component {
         <Layout>
           <ImageGallery
             value={this.state.textQuery}
-            pageNumber={this.state.pageNumber}
+            // pageNumber={this.state.pageNumber}
           />
         </Layout>
 
