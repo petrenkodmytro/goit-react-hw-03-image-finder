@@ -11,9 +11,11 @@ import { Modal } from 'components/Modal/Modal';
 export class ImageGallery extends Component {
   static propTypes = {
     value: PropTypes.string.isRequired,
+    pageNumber: PropTypes.number.isRequired,
   };
 
   state = {
+    textQuery: '',
     images: [],
     pageNumber: 1,
     loading: false, // spiner
@@ -22,7 +24,25 @@ export class ImageGallery extends Component {
     totalPage: null,
   };
 
+  // якщо змінився запит скидаємо сторінки на початок
+  static getDerivedStateFromProps(nextProps, prevState) {
+    // Викликається перед render() під час монтування та перед усіма наступними викликами render, тобто після оновлення state або props
+    // Можна використовувати для того, щоб встановити state, залежно від props під час кожної їх зміни
+    // Повинен повернути об'єкт, яким буде оновлений стан, або null, якщо нічого оновлювати не потрібно
+    // Немає доступу до this
+    if (prevState.textQuery !== nextProps.value) {
+      // console.log(prevState); //стан
+      // console.log(nextProps); //пропси з Арр
+      return { pageNumber: 1, textQuery: nextProps.value };
+    }
+    return null;
+  }
+
   async componentDidUpdate(prevProps, prevState) {
+    //     Викликається відразу після оновлення компонента в DOM
+    // Не викликається при початковому рендері компонента
+    // Можна викликати setState(), обов'язково обгорнувши його в умову перевірки зміни попередніх і наступних props або state, щоб не виник нескінченний цикл ререндера (вкладка зависне або впаде).
+    // Можна робити HTTP-запити
     const { pageNumber } = this.state;
     const prevSearchValue = prevProps.value;
     const nextSearchValue = this.props.value;
@@ -36,10 +56,7 @@ export class ImageGallery extends Component {
     ) {
       // запуск спінера
       this.setState({ loading: true, error: null });
-      // якщо змінився запит скидаємо сторінки на початок
-      if (prevSearchValue !== nextSearchValue) {
-        this.setState({ pageNumber: this.props.pageNumber });
-      }
+
       // пішов запит на бекенд
       try {
         const response = await fetchData(nextSearchValue, pageNumber);
@@ -114,40 +131,3 @@ export class ImageGallery extends Component {
     );
   }
 }
-
-// async componentDidUpdate(prevProps, prevState) {
-//   const { pageNumber } = this.state;
-//   const prevSearchValue = prevProps.value;
-//   const nextSearchValue = this.props.value;
-//   // console.log(prevSearchValue);
-//   // console.log(nextSearchValue);
-//   // якщо змінився запит скидаємо сторінки на початок
-//   if (prevSearchValue !== nextSearchValue) {
-//     this.setState({ pageNumber: 1 });
-//   }
-//   console.log(this.props.pageNumber);
-//   // Перевіряємо, чи змінились пропси запиту або state сторінки (pageNumber)
-//   if (
-//     prevSearchValue !== nextSearchValue ||
-//     prevState.pageNumber !== pageNumber
-//   ) {
-//     // запуск спінера
-//     this.setState({ loading: true, error: null });
-//     // пішов запит на бекенд
-//     try {
-//       const response = await fetchData(nextSearchValue, pageNumber);
-//       console.log(pageNumber);
-//       this.setState({
-//         images:
-//           pageNumber === 1
-//             ? response.data.hits
-//             : [...prevState.images, ...response.data.hits],
-//         totalPage: response.data.totalHits,
-//       });
-//     } catch (error) {
-//       this.setState({ error: 'Something wrong. Please try again.' });
-//     } finally {
-//       this.setState({ loading: false });
-//     }
-//   }
-// }
