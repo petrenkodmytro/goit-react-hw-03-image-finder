@@ -28,29 +28,30 @@ export class ImageGallery extends Component {
     const nextSearchValue = this.props.value;
     // console.log(prevSearchValue);
     // console.log(nextSearchValue);
-    // якщо змінився запит скидаємо сторінки на початок
-    if (prevSearchValue !== nextSearchValue) {
-      this.setState({ pageNumber: 1, error: null });
-    }
-    console.log(pageNumber);
+
     // Перевіряємо, чи змінились пропси запиту або state сторінки (pageNumber)
     if (
       prevSearchValue !== nextSearchValue ||
       prevState.pageNumber !== pageNumber
     ) {
       // запуск спінера
-      this.setState({ loading: true });
+      this.setState({ loading: true, error: null });
+      // якщо змінився запит скидаємо сторінки на початок
+      if (prevSearchValue !== nextSearchValue) {
+        this.setState({ pageNumber: this.props.pageNumber });
+      }
       // пішов запит на бекенд
       try {
         const response = await fetchData(nextSearchValue, pageNumber);
-        console.log(pageNumber);
-        this.setState({
+        console.log('запит:', nextSearchValue);
+        console.log('номер сторінки:', pageNumber);
+        this.setState(prevState => ({
           images:
             pageNumber === 1
               ? response.data.hits
               : [...prevState.images, ...response.data.hits],
           totalPage: response.data.totalHits,
-        });
+        }));
       } catch (error) {
         this.setState({ error: 'Something wrong. Please try again.' });
       } finally {
@@ -113,3 +114,40 @@ export class ImageGallery extends Component {
     );
   }
 }
+
+// async componentDidUpdate(prevProps, prevState) {
+//   const { pageNumber } = this.state;
+//   const prevSearchValue = prevProps.value;
+//   const nextSearchValue = this.props.value;
+//   // console.log(prevSearchValue);
+//   // console.log(nextSearchValue);
+//   // якщо змінився запит скидаємо сторінки на початок
+//   if (prevSearchValue !== nextSearchValue) {
+//     this.setState({ pageNumber: 1 });
+//   }
+//   console.log(this.props.pageNumber);
+//   // Перевіряємо, чи змінились пропси запиту або state сторінки (pageNumber)
+//   if (
+//     prevSearchValue !== nextSearchValue ||
+//     prevState.pageNumber !== pageNumber
+//   ) {
+//     // запуск спінера
+//     this.setState({ loading: true, error: null });
+//     // пішов запит на бекенд
+//     try {
+//       const response = await fetchData(nextSearchValue, pageNumber);
+//       console.log(pageNumber);
+//       this.setState({
+//         images:
+//           pageNumber === 1
+//             ? response.data.hits
+//             : [...prevState.images, ...response.data.hits],
+//         totalPage: response.data.totalHits,
+//       });
+//     } catch (error) {
+//       this.setState({ error: 'Something wrong. Please try again.' });
+//     } finally {
+//       this.setState({ loading: false });
+//     }
+//   }
+// }
