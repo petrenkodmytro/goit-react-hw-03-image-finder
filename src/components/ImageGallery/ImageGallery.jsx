@@ -11,7 +11,6 @@ import { Modal } from 'components/Modal/Modal';
 export class ImageGallery extends Component {
   static propTypes = {
     value: PropTypes.string.isRequired,
-    pageNumber: PropTypes.number.isRequired,
   };
 
   state = {
@@ -24,20 +23,6 @@ export class ImageGallery extends Component {
     totalPage: null,
   };
 
-  // якщо змінився запит скидаємо сторінки на початок
-  // static getDerivedStateFromProps(nextProps, prevState) {
-  //   // Викликається перед render() під час монтування та перед усіма наступними викликами render, тобто після оновлення state або props
-  //   // Можна використовувати для того, щоб встановити state, залежно від props під час кожної їх зміни
-  //   // Повинен повернути об'єкт, яким буде оновлений стан, або null, якщо нічого оновлювати не потрібно
-  //   // Немає доступу до this
-  //   if (prevState.textQuery !== nextProps.value) {
-  //     // console.log(prevState); //стан
-  //     // console.log(nextProps); //пропси з Арр
-  //     return { pageNumber: 1, textQuery: nextProps.value };
-  //   }
-  //   return null;
-  // }
-
   async componentDidUpdate(prevProps, prevState) {
     //     Викликається відразу після оновлення компонента в DOM
     // Не викликається при початковому рендері компонента
@@ -49,8 +34,7 @@ export class ImageGallery extends Component {
     // const page = this.props.pageNumber;
 
     if (prevSearchValue !== nextSearchValue) {
-      // this.setState({ pageNumber: page });
-      pageNumber = 1;
+      this.setState({ pageNumber: 1 });
     }
 
     // console.log('prevSearchValue', prevSearchValue);
@@ -138,3 +122,17 @@ export class ImageGallery extends Component {
     );
   }
 }
+
+// якщо змінився запит скидаємо сторінки на початок
+// static getDerivedStateFromProps(nextProps, prevState) {
+//   // Викликається перед render() під час монтування та перед усіма наступними викликами render, тобто після оновлення state або props
+//   // Можна використовувати для того, щоб встановити state, залежно від props під час кожної їх зміни
+//   // Повинен повернути об'єкт, яким буде оновлений стан, або null, якщо нічого оновлювати не потрібно
+//   // Немає доступу до this
+//   if (prevState.textQuery !== nextProps.value) {
+//     // console.log(prevState); //стан
+//     // console.log(nextProps); //пропси з Арр
+//     return { pageNumber: 1, textQuery: nextProps.value };
+//   }
+//   return null;
+// }
